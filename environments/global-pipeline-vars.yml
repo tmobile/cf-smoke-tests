@@ -1,0 +1,59 @@
+---
+# Common params
+PIPELINE_NAME: smoke-test-pipeline
+CONCOURSE_USERNAME: concourse
+SMOKE_ORG: smoke-org
+SMOKE_USER: smoke-user
+REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
+
+# PAS params
+PAS_SMOKE_SPACE: pas-smoke-space
+PAS_SAMPLE_APP: pas-sample-app
+
+# AUTO-SCALING params
+AUTOSCALER_PRODUCT: pcf-app-autoscaler
+AUTOSCALER_SERVICE_NAME: app-autoscaler
+AUTOSCALER_SERVICE_PLAN: standard
+AUTOSCALER_SERVICE_INSTANCE: autoscaler-test-svc-instance
+AUTOSCALER_SAMPLE_APP: autoscaler-sample-app
+
+# MYSQL params
+MYSQL_SMOKE_SPACE: mysql-smoke-space
+MYSQL_SERVICE_INSTANCE: mysql-smoke-test-svc-instance
+MYSQL_SAMPLE_APP: mysql-sample-app
+
+# RABBITMQ params
+RABBITMQ_SMOKE_SPACE: rabbitmq-smoke-space
+RABBITMQ_SERVICE_NAME: p-rabbitmq
+RABBITMQ_SERVICE_INSTANCE: rabbitmq-smoke-test-svc-instance
+RABBITMQ_SERVICE_KEY: rabbitmq-smoke-test-svc-key
+RABBITMQ_SAMPLE_APP: rabbitmq-sample-app
+
+# REDIS params	
+REDIS_SMOKE_SPACE: redis-smoke-space	
+REDIS_SERVICE_NAME: p-redis
+REDIS_SERVICE_INSTANCE_SHARED_VM: redis-smoke-test-svc-instance-shared-vm	
+REDIS_SERVICE_KEY_SHARED_VM: redis-smoke-test-svc-key-shared-vm	
+REDIS_SERVICE_INSTANCE_DEDICATED_VM: redis-smoke-test-svc-instance-dedicated-vm	
+REDIS_SERVICE_KEY_DEDICATED_VM: redis-smoke-test-svc-key-dedicated-vm	
+REDIS_SAMPLE_APP: redis-sample-app	
+
+# SCS params
+SCS_SMOKE_SPACE: scs-smoke-space
+CONFIG_SERVER_SERVICE_NAME: p-config-server
+CONFIG_SERVER_SERVICE_INSTANCE: config-server-smoke-test-svc-instance
+CIRCUIT_BREAKER_SERVICE_NAME: p-circuit-breaker-dashboard
+CIRCUIT_BREAKER_SERVICE_INSTANCE: circuit-breaker-smoke-test-svc-instance
+SERVICE_REGISTRY_SERVICE_NAME: p-service-registry
+SERVICE_REGISTRY_SERVICE_INSTANCE: service-registry-smoke-test-svc-instance
+SCS_MYSQL_SERVICE_INSTANCE: scs-smoke-test-mysql-svc-instance
+SCS_SAMPLE_APP_URI: git@YOUR_INTERNAL_GITHUB:<ORGANIZATION>/cf-smoke-tests.git
+SCS_SAMPLE_APP: scs-sample-app
+
+# PCC params
+PCC_SMOKE_SPACE: pcc-smoke-space
+PCC_SERVICE_NAME: p-cloudcache
+PCC_SERVICE_INSTANCE: pcc-smoke-test-svc-instance
+PCC_SERVICE_KEY: pcc-smoke-test-svc-key
+GEMFIRE_PRODUCT: pivotal-gemfire
+PCC_SAMPLE_APP: cloudcache-sample-app

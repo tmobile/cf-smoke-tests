@@ -1,0 +1,9 @@
+---
+applications:
+- path: build/libs/cloudcache-sample-app-1.0-SNAPSHOT-all.jar
+  no-route: true
+  health-check-type: none
+  buildpacks:
+  - java_buildpack_offline
+  services:
+  - service0

@@ -1,0 +1,9 @@
+
+---
+applications:
+- name: rabbitmq-sample-app
+  memory: 128M
+  buildpacks: 
+  - python_buildpack
+  env:
+    RMQ_SERVICE: p-rabbitmq

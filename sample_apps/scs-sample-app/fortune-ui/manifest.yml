@@ -1,0 +1,5 @@
+---
+applications:
+- memory: 1024M
+  instances: 1
+  path: ./fortune-teller-ui.jar

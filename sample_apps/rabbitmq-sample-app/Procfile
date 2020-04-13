@@ -1,0 +1,1 @@
+web: python rabbitmq_health_check.py

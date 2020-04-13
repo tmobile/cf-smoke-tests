@@ -1,0 +1,4 @@
+config.json
+config*.json
+integration-config.json
+integration_config.json

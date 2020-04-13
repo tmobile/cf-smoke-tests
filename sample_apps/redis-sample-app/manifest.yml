@@ -1,0 +1,9 @@
+
+---
+applications:
+- name: redis-sample-app
+  memory: 128M
+  buildpacks: 
+  - python_buildpack
+  env:
+    REDIS_SERVICE: p-redis

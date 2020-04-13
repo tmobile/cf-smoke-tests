@@ -1,0 +1,22 @@
+resources:
+- name: cf-smoke-tests
+  type: git
+  source:
+    uri: git@YOUR_INTERNAL_GITHUB:<ORGANIZATION>/cf-smoke-tests.git
+    branch: master
+    private_key: ((GIT_PRIVATE_KEY))
+    skip_ssl_verification: true
+
+
+jobs:
+- name: deploy-smoke-test-pipeline-job
+  serial: true
+  build_logs_to_retain: 50
+  plan:
+  - get: cf-smoke-tests
+    trigger: true
+  - task: deploy-smoke-test-pipeline-task
+    file: cf-smoke-tests/ci/tasks/run_deploy_smoke_test_pipeline.yml
+    params:
+      CONCOURSE_PASSWORD_FOR_FOUNDATION1: ((CONCOURSE_PASSWORD_FOR_FOUNDATION1))
+      CONCOURSE_PASSWORD_FOR_FOUNDATION2: ((CONCOURSE_PASSWORD_FOR_FOUNDATION2))

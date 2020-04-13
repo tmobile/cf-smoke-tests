@@ -1,0 +1,21 @@
+platform: linux
+image_resource: 
+  type: docker-image
+  source: 
+    repository: tmobilecf/tmo-concourse-ubuntu
+
+inputs:
+- name: metadata
+- name: cf-smoke-tests
+
+run:
+  path: sh
+  args:
+  - -exc
+  - |
+    export ATC_EXTERNAL_URL=$(cat metadata/atc_external_url)
+    export BUILD_TEAM_NAME=$(cat metadata/build_team_name)
+    export BUILD_PIPELINE_NAME=$(cat metadata/build_pipeline_name)
+    export BUILD_JOB_NAME=$(cat metadata/build_job_name)
+    export BUILD_NAME=$(cat metadata/build_name)
+    python cf-smoke-tests/src/pas_smoke_tests.py

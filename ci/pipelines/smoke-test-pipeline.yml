@@ -1,0 +1,230 @@
+groups:
+- name: all
+  jobs:
+    - pas-test-job
+    - autoscaling-test-job
+    - mysql-test-job
+    - rabbitmq-test-job
+    - redis-test-job
+    - scs-test-job
+    - pcc-test-job
+    - app-connectivity-test-job
+- name: pas-tests
+  jobs:
+    - pas-test-job
+    - autoscaling-test-job
+- name: mysql-tests
+  jobs:
+    - mysql-test-job
+- name: rabbitmq-tests
+  jobs:
+    - rabbitmq-test-job
+- name: redis-tests
+  jobs:
+    - redis-test-job
+- name: scs-tests
+  jobs:
+    - scs-test-job
+- name: pcc-tests
+  jobs:
+    - pcc-test-job
+- name: app-connectivity-tests
+  jobs:
+    - app-connectivity-test-job
+
+resource_types:
+- name: metadata
+  type: docker-image
+  source:
+    repository: olhtbr/metadata-resource
+    tag: 2.0.1
+
+resources:
+- name: metadata
+  type: metadata
+- name: cf-smoke-tests
+  type: git
+  source:
+    uri: git@YOUR_INTERNAL_GITHUB:<ORGANIZATION>/cf-smoke-tests.git
+    branch: master
+    private_key: ((GIT_PRIVATE_KEY))
+    skip_ssl_verification: true
+- name: 5m-trigger-res
+  type: time
+  source:
+    interval: 5m
+- name: 15m-trigger-res
+  type: time
+  source:
+    interval: 15m
+- name: 30m-trigger-res
+  type: time
+  source:
+    interval: 30m
+- name: 60m-trigger-res
+  type: time
+  source:
+    interval: 60m
+
+common_smoke_test_params: &common_smoke_test_params
+  FOUNDATION: ((FOUNDATION))
+  FOUNDATION_API_DOMAIN: ((FOUNDATION_API_DOMAIN))
+  FOUNDATION_APPS_DOMAIN: ((FOUNDATION_APPS_DOMAIN))
+  SMOKE_ORG: ((SMOKE_ORG))
+  SMOKE_USER: ((SMOKE_USER))
+  REQUESTS_CA_BUNDLE: ((REQUESTS_CA_BUNDLE))
+  PIVNET_API_TOKEN: ((PIVNET_API_TOKEN))
+  SMOKE_PASSWORD: ((SMOKE_PASSWORD))
+
+jobs:
+- name: pas-test-job
+  serial: true
+  build_logs_to_retain: 100
+  plan:
+  - put: metadata
+  - get: cf-smoke-tests
+  - get: 5m-trigger-res
+    trigger: true
+  - task: pas-test-task
+    file: cf-smoke-tests/ci/tasks/run_pas_tests.yml
+    params:
+      <<: *common_smoke_test_params
+      SMOKE_SPACE: ((PAS_SMOKE_SPACE))
+      PAS_SAMPLE_APP: ((PAS_SAMPLE_APP))
+- name: autoscaling-test-job
+  serial: true
+  build_logs_to_retain: 100
+  plan:
+  - put: metadata
+  - get: cf-smoke-tests
+  - get: 60m-trigger-res
+    trigger: true
+  - task: autoscaling-test-task
+    file: cf-smoke-tests/ci/tasks/run_autoscaling_tests.yml
+    params:
+      <<: *common_smoke_test_params
+      SMOKE_SPACE: ((PAS_SMOKE_SPACE))
+      AUTOSCALER_SAMPLE_APP: ((AUTOSCALER_SAMPLE_APP))
+      AUTOSCALER_PRODUCT: ((AUTOSCALER_PRODUCT))
+      AUTOSCALER_VERSION: ((AUTOSCALER_VERSION))
+      AUTOSCALER_SERVICE_NAME: ((AUTOSCALER_SERVICE_NAME))
+      AUTOSCALER_SERVICE_PLAN: ((AUTOSCALER_SERVICE_PLAN))
+      AUTOSCALER_SERVICE_INSTANCE: ((AUTOSCALER_SERVICE_INSTANCE))
+- name: mysql-test-job
+  serial: true
+  build_logs_to_retain: 100
+  plan:
+  - put: metadata
+  - get: cf-smoke-tests
+  - get: 15m-trigger-res
+    trigger: true
+  - task: mysql-test-task
+    file: cf-smoke-tests/ci/tasks/run_mysql_tests.yml
+    params:
+      <<: *common_smoke_test_params
+      SMOKE_SPACE: ((MYSQL_SMOKE_SPACE))
+      MYSQL_SERVICE_NAME: ((MYSQL_SERVICE_NAME))
+      MYSQL_SERVICE_PLAN: ((MYSQL_SERVICE_PLAN))
+      MYSQL_SERVICE_INSTANCE: ((MYSQL_SERVICE_INSTANCE))
+      MYSQL_SAMPLE_APP: ((MYSQL_SAMPLE_APP))
+- name: rabbitmq-test-job
+  serial: true
+  build_logs_to_retain: 100
+  plan:
+  - put: metadata
+  - get: cf-smoke-tests
+  - get: 15m-trigger-res
+    trigger: true
+  - task: rabbitmq-test-task
+    file: cf-smoke-tests/ci/tasks/run_rabbitmq_tests.yml
+    params:
+      <<: *common_smoke_test_params
+      SMOKE_SPACE: ((RABBITMQ_SMOKE_SPACE))
+      RABBITMQ_SERVICE_NAME: ((RABBITMQ_SERVICE_NAME))
+      RABBITMQ_SERVICE_PLAN: ((RABBITMQ_SERVICE_PLAN))
+      RABBITMQ_SERVICE_INSTANCE: ((RABBITMQ_SERVICE_INSTANCE))
+      RABBITMQ_SERVICE_KEY: ((RABBITMQ_SERVICE_KEY))
+      RABBITMQ_SAMPLE_APP: ((RABBITMQ_SAMPLE_APP))
+- name: redis-test-job	
+  serial: true	
+  build_logs_to_retain: 100	
+  plan:
+  - put: metadata	
+  - get: cf-smoke-tests	
+  - get: 30m-trigger-res	
+    trigger: true	
+  - task: redis-test-task	
+    file: cf-smoke-tests/ci/tasks/run_redis_tests.yml	
+    params:
+      <<: *common_smoke_test_params
+      SMOKE_SPACE: ((REDIS_SMOKE_SPACE))
+      REDIS_SERVICE_NAME: ((REDIS_SERVICE_NAME))
+      REDIS_SERVICE_SHARED_VM_PLAN: ((REDIS_SERVICE_SHARED_VM_PLAN))
+      REDIS_SERVICE_DEDICATED_VM_PLAN: ((REDIS_SERVICE_DEDICATED_VM_PLAN))
+      REDIS_SERVICE_INSTANCE_SHARED_VM: ((REDIS_SERVICE_INSTANCE_SHARED_VM))
+      REDIS_SERVICE_KEY_SHARED_VM: ((REDIS_SERVICE_KEY_SHARED_VM))
+      REDIS_SERVICE_INSTANCE_DEDICATED_VM: ((REDIS_SERVICE_INSTANCE_DEDICATED_VM))
+      REDIS_SERVICE_KEY_DEDICATED_VM: ((REDIS_SERVICE_KEY_DEDICATED_VM))
+      REDIS_SAMPLE_APP: ((REDIS_SAMPLE_APP))
+- name: scs-test-job
+  serial: true
+  build_logs_to_retain: 100
+  plan:
+  - put: metadata
+  - get: cf-smoke-tests
+  - get: 30m-trigger-res
+    trigger: true
+  - task: scs-test-task
+    file: cf-smoke-tests/ci/tasks/run_scs_tests.yml
+    params:
+      <<: *common_smoke_test_params
+      SMOKE_SPACE: ((SCS_SMOKE_SPACE))
+      SCS_SAMPLE_APP: ((SCS_SAMPLE_APP))
+      SCS_SAMPLE_APP_URI: ((SCS_SAMPLE_APP_URI))
+      SCS_SAMPLE_APP_KEY: ((GIT_PRIVATE_KEY))
+      CONFIG_SERVER_SERVICE_NAME: ((CONFIG_SERVER_SERVICE_NAME))
+      CONFIG_SERVER_SERVICE_PLAN: ((CONFIG_SERVER_SERVICE_PLAN))
+      CONFIG_SERVER_SERVICE_INSTANCE: ((CONFIG_SERVER_SERVICE_INSTANCE))
+      CIRCUIT_BREAKER_SERVICE_NAME: ((CIRCUIT_BREAKER_SERVICE_NAME))
+      CIRCUIT_BREAKER_SERVICE_PLAN: ((CIRCUIT_BREAKER_SERVICE_PLAN))
+      CIRCUIT_BREAKER_SERVICE_INSTANCE: ((CIRCUIT_BREAKER_SERVICE_INSTANCE))
+      SERVICE_REGISTRY_SERVICE_NAME: ((SERVICE_REGISTRY_SERVICE_NAME))
+      SERVICE_REGISTRY_SERVICE_PLAN: ((SERVICE_REGISTRY_SERVICE_PLAN))
+      SERVICE_REGISTRY_SERVICE_INSTANCE: ((SERVICE_REGISTRY_SERVICE_INSTANCE))
+      SCS_MYSQL_SERVICE_NAME: ((SCS_MYSQL_SERVICE_NAME))
+      SCS_MYSQL_SERVICE_PLAN: ((SCS_MYSQL_SERVICE_PLAN))
+      SCS_MYSQL_SERVICE_INSTANCE: ((SCS_MYSQL_SERVICE_INSTANCE))
+- name: pcc-test-job
+  serial: true
+  build_logs_to_retain: 100
+  plan:
+  - put: metadata
+  - get: cf-smoke-tests
+  - get: 60m-trigger-res
+    trigger: true
+  - task: pcc-test-task
+    file: cf-smoke-tests/ci/tasks/run_pcc_tests.yml
+    params:
+      <<: *common_smoke_test_params
+      SMOKE_SPACE: ((PCC_SMOKE_SPACE))
+      PCC_SERVICE_PLAN: ((PCC_SERVICE_PLAN))
+      GEMFIRE_PRODUCT: ((GEMFIRE_PRODUCT))
+      GEMFIRE_VERSION: ((GEMFIRE_VERSION))
+      PCC_SERVICE_NAME: ((PCC_SERVICE_NAME))
+      PCC_SERVICE_INSTANCE: ((PCC_SERVICE_INSTANCE))
+      PCC_SERVICE_KEY: ((PCC_SERVICE_KEY))
+      PCC_SAMPLE_APP: ((PCC_SAMPLE_APP))
+- name: app-connectivity-test-job
+  serial: true
+  build_logs_to_retain: 100
+  plan:
+  - put: metadata
+  - get: cf-smoke-tests
+  - get: 15m-trigger-res
+    trigger: true
+  - task: app-connectivity-test-task
+    file: cf-smoke-tests/ci/tasks/run_app_connectivity_tests.yml
+    params:
+      <<: *common_smoke_test_params
+      FOUNDATION_APPS_DOMAIN: ((FOUNDATION_APPS_DOMAIN))
+      APP1_HEALTH_CHECK_URL: ((APP1_HEALTH_CHECK_URL))

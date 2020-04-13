@@ -1,0 +1,7 @@
+---
+applications:
+- memory: 256M
+  instances: 1
+  buildpacks: 
+    - python_buildpack
+

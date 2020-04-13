@@ -1,0 +1,34 @@
+---
+# Foundation-specific params
+CONCOURSE_URL: https://concourse-url-for-foundation2
+FOUNDATION: foundation2
+FOUNDATION_API_DOMAIN: api.sys.foundation2.cfdomain.com
+FOUNDATION_APPS_DOMAIN: https://apps.sys.foundation2.cfdomain.com
+
+# PAS params
+AUTOSCALER_VERSION: 2.0.91
+
+# MYSQL params
+MYSQL_SERVICE_NAME: p-mysql
+MYSQL_SERVICE_PLAN: db-small
+
+# RABBITMQ params
+RABBITMQ_SERVICE_PLAN: standard
+
+# REDIS params
+REDIS_SERVICE_DEDICATED_VM_PLAN: dedicated-vm
+REDIS_SERVICE_SHARED_VM_PLAN: shared-vm
+
+# SCS params
+CONFIG_SERVER_SERVICE_PLAN: standard
+CIRCUIT_BREAKER_SERVICE_PLAN: standard
+SERVICE_REGISTRY_SERVICE_PLAN: standard
+SCS_MYSQL_SERVICE_NAME: p-mysql
+SCS_MYSQL_SERVICE_PLAN: db-small
+
+# PCC params
+PCC_SERVICE_PLAN: small-footprint
+GEMFIRE_VERSION: 9.7.1
+
+# APP CONNECTIVITY params
+APP1_HEALTH_CHECK_URL: https://app1.foundation2.cfdomain.com

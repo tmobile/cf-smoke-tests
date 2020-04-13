@@ -1,0 +1,1 @@
+web: python mysql_health_check.py

@@ -1,0 +1,47 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '1.2.4'
+}
+
+group 'io.pivotal'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.7
+
+mainClassName = "io.pivotal.MyJavaApplication"
+
+repositories {
+    mavenCentral()
+    maven {
+        credentials {
+            username "$gemfireReleaseRepoUser"
+            password "$gemfireReleaseRepoPassword"
+        }
+        url "https://commercial-repo.pivotal.io/data3/gemfire-release-repo/gemfire"
+    }
+}
+
+dependencies {
+    compile group: 'io.pivotal.gemfire', name:'geode-core', version: '9.0.2'
+    compile group: 'io.pivotal.gemfire', name:'geode-wan', version: '9.0.2'
+    compile group: 'io.pivotal.gemfire', name:'geode-cq', version: '9.0.2'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.1'
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+tasks.jar.dependsOn(shadowJar)
+
+shadowJar {
+    mergeServiceFiles()
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'io.pivotal.MyJavaApplication'
+        )
+    }
+}
