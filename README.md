@@ -1,7 +1,7 @@
 # cf-smoke-tests: A Custom Smoke-Tests suite for multi-foundation Cloud-Foundry setup
-This smoke-tests suite is a "template", containing pipelines, configurations, sample-apps, and scripts, 
-that can be used to monitor the health of various critical Cloud-Foundry components, workflows and marketplace services. 
-
+This smoke-tests suite is a "template", containing pipelines, configurations, sample-apps, and scripts,
+that can be used to monitor the health of various critical Cloud-Foundry components, workflows and marketplace services.
+[Check out this article for a more detailed overview of the project](https://opensource.t-mobile.com/blog/posts/diwan-smoke-test-suite).
 
 This repo has the following Components -
 
@@ -15,7 +15,7 @@ The environments directory contains foundations-specific param files and a commo
 ## 3. Smoke-Tests scripts -
 The scripts that test the end-to-end workflows involving various types of service-instances and sample apps that interact with those service instances.
 
-## 4. Sample Apps - 
+## 4. Sample Apps -
 These apps are simple light weight apps that are used by the smoke-tests scripts to test the app-workflows with service-instances.
 
 
